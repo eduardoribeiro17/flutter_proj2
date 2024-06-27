@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
+import 'package:uuid/uuid.dart';
 
 class JournalCard extends StatelessWidget {
   final Journal? journal;
   final DateTime showedDate;
   const JournalCard({Key? key, this.journal, required this.showedDate})
       : super(key: key);
+
+  callAddJournalScreen(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      'add-journal',
+      arguments: Journal(
+        id: const Uuid().v1(),
+        content: "",
+        createdAt: showedDate,
+        updatedAt: showedDate,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +93,9 @@ class JournalCard extends StatelessWidget {
       );
     } else {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          callAddJournalScreen(context);
+        },
         child: Container(
           height: 115,
           alignment: Alignment.center,
