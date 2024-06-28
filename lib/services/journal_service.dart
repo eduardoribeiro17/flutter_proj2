@@ -6,7 +6,9 @@ import 'dart:convert';
 import 'package:http_interceptor/http/intercepted_client.dart';
 
 class JournalService {
-  static const String url = 'http://localhost:3000/';
+  static const String _host = '192.168.5.165';
+  static const String _port = '3000';
+  static const String url = 'http://$_host:$_port/';
   static const String resource = 'journals/';
 
   http.Client client =
@@ -28,9 +30,19 @@ class JournalService {
     return resp.statusCode == 201;
   }
 
-  Future<String> get() async {
+  Future<List<Journal>> getAll() async {
     http.Response resp = await client.get(getUrl());
 
-    return resp.body;
+    if (resp.statusCode != 200) throw Exception();
+
+    List<Journal> list = [];
+    List<dynamic> respList = jsonDecode(resp.body);
+
+    for (var item in respList) {
+      print(item);
+      list.add(Journal.fromMap(item));
+    }
+
+    return list;
   }
 }

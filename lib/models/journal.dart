@@ -19,6 +19,12 @@ class Journal {
         createdAt = DateTime.now(),
         updatedAt = DateTime.now();
 
+  Journal.fromMap(Map<String, dynamic> map)
+      : id = map['id'],
+        content = map['content'],
+        createdAt = DateTime.parse(map['createdAt']),
+        updatedAt = DateTime.parse(map['createdAt']);
+
   Map<String, dynamic> toMap() => {
         'id': id,
         'contend': content,

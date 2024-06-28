@@ -5,5 +5,30 @@
       "content": "Ola Mundo"
     }
   ],
-  "journals": []
+  "journals": [
+    {
+      "id": "55e5f460-34ea-11ef-8a36-1b25952e8c77",
+      "contend": "I'm not empty",
+      "createdAt": "2024-06-28 01:04:13.992964",
+      "updatedAt": "2024-06-28 01:04:13.992974"
+    },
+    {
+      "id": "b2617de0-34ea-11ef-ad7f-4d05ae55d1d8",
+      "contend": "One more tired day!",
+      "createdAt": "2024-06-19 01:06:45.265672",
+      "updatedAt": "2024-06-19 01:06:45.265672"
+    },
+    {
+      "id": "8953ee40-34ec-11ef-ad7f-4d05ae55d1d8",
+      "contend": "keep going!",
+      "createdAt": "2024-06-20 01:06:45.265672",
+      "updatedAt": "2024-06-20 01:06:45.265672"
+    },
+    {
+      "id": "d6f62400-34f2-11ef-bb14-6dd6a7956e9d",
+      "contend": "Teste",
+      "createdAt": "2024-06-18 02:04:01.639818",
+      "updatedAt": "2024-06-18 02:04:01.639818"
+    }
+  ]
 }

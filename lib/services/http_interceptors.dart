@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:http_interceptor/http_interceptor.dart';
 
 class LoggerInterceptor extends InterceptorContract {
