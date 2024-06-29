@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webapi_first_course/database/database.dart';
 import 'package:flutter_webapi_first_course/screens/home_screen/widgets/home_screen_list.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 
@@ -13,13 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // O último dia apresentado na lista
-  DateTime currentDay = DateTime.now();
-
-  // Tamanho da lista
   int windowPage = 10;
-
-  // A base de dados mostrada na lista
+  DateTime currentDay = DateTime.now();
   Map<String, Journal> database = {};
 
   final ScrollController _listScrollController = ScrollController();
@@ -51,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         controller: _listScrollController,
         children: generateListJournalCards(
+          refreshList: refresh,
           windowPage: windowPage,
           currentDay: currentDay,
           database: database,

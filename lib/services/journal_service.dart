@@ -18,7 +18,6 @@ class JournalService {
   final Map<String, String> _headers = {'Content-Type': 'application/json'};
 
   Future<bool> register(Journal journal) async {
-    print('Content -> $journal');
     final String content = jsonEncode(journal.toMap());
 
     http.Response resp = await client.post(
@@ -39,7 +38,6 @@ class JournalService {
     List<dynamic> respList = jsonDecode(resp.body);
 
     for (var item in respList) {
-      print(item);
       list.add(Journal.fromMap(item));
     }
 

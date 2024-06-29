@@ -6,8 +6,13 @@ import 'package:uuid/uuid.dart';
 class JournalCard extends StatelessWidget {
   final Journal? journal;
   final DateTime showedDate;
-  const JournalCard({Key? key, this.journal, required this.showedDate})
-      : super(key: key);
+  final Function refreshList;
+  const JournalCard({
+    Key? key,
+    this.journal,
+    required this.showedDate,
+    required this.refreshList,
+  }) : super(key: key);
 
   callAddJournalScreen(BuildContext context) {
     Navigator.pushNamed(
@@ -21,13 +26,14 @@ class JournalCard extends StatelessWidget {
       ),
     ).then(
       (value) {
-        if (value != null && value == true) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registro efetuado com sucesso!'),
-            ),
-          );
-        }
+        refreshList();
+
+        final String message = (value != null && value == true)
+            ? 'Registro efetuado com sucesso!'
+            : 'Ocorreu um erro ao salvar';
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
       },
     );
   }
@@ -103,9 +109,7 @@ class JournalCard extends StatelessWidget {
       );
     } else {
       return InkWell(
-        onTap: () {
-          callAddJournalScreen(context);
-        },
+        onTap: () => callAddJournalScreen(context),
         child: Container(
           height: 115,
           alignment: Alignment.center,
