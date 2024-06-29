@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
         actionIconTheme: ActionIconThemeData(
             backButtonIconBuilder: (context) =>
                 const Icon(Icons.arrow_back, color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.white),
       ),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,

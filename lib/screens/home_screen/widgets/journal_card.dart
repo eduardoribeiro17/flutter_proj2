@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter_webapi_first_course/screens/common/confirmation_dialog.dart';
+import 'package:flutter_webapi_first_course/services/journal_service.dart';
 
 class JournalCard extends StatelessWidget {
   final Journal? journal;
   final DateTime showedDate;
   final Function refreshList;
+
   const JournalCard({
     Key? key,
     this.journal,
@@ -14,35 +16,69 @@ class JournalCard extends StatelessWidget {
     required this.refreshList,
   }) : super(key: key);
 
-  callAddJournalScreen(BuildContext context) {
-    Navigator.pushNamed(
-      context,
-      'add-journal',
-      arguments: Journal(
-        id: const Uuid().v1(),
-        content: "",
-        createdAt: showedDate,
-        updatedAt: showedDate,
-      ),
-    ).then(
-      (value) {
-        refreshList();
-
-        final String message = (value != null && value == true)
-            ? 'Registro efetuado com sucesso!'
-            : 'Ocorreu um erro ao salvar';
-
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
-      },
+  callAddJournalScreen(BuildContext context, {Journal? target}) {
+    Journal newJ = Journal(
+      id: '',
+      content: '',
+      createdAt: showedDate,
+      updatedAt: showedDate,
     );
+    Journal journal = target ?? newJ;
+
+    Navigator.pushNamed(context, 'add-journal', arguments: journal).then(
+      (value) {
+        if (value != null && value == true) {
+          refreshList();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registro efetuado com sucesso!'),
+            ),
+          );
+        }
+      },
+      onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ocorreu um erro ao salvar'),
+        ),
+      ),
+    );
+  }
+
+  removeJournal(BuildContext context, String id) async {
+    JournalService service = JournalService();
+
+    final dynamic confirm = await showConfirmationDialog(
+      context,
+      content: 'Deseja realmente remover este item?',
+      okOption: 'Remover',
+    );
+
+    if (confirm) {
+      service.delete(id).then(
+        (value) {
+          if (value) {
+            refreshList();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Registro deletado com sucesso!'),
+              ),
+            );
+          }
+        },
+        onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ocorreu um erro ao salvar'),
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (journal != null) {
       return InkWell(
-        onTap: () {},
+        onTap: () => callAddJournalScreen(context, target: journal),
         child: Container(
           height: 115,
           margin: const EdgeInsets.all(8),
@@ -103,13 +139,17 @@ class JournalCard extends StatelessWidget {
                   ),
                 ),
               ),
+              IconButton(
+                onPressed: () => removeJournal(context, journal!.id),
+                icon: const Icon(Icons.delete),
+              ),
             ],
           ),
         ),
       );
     } else {
       return InkWell(
-        onTap: () => callAddJournalScreen(context),
+        onTap: () => callAddJournalScreen(context, target: journal),
         child: Container(
           height: 115,
           alignment: Alignment.center,

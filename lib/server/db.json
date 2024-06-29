@@ -5,36 +5,25 @@
       "content": "Ola Mundo"
     }
   ],
+  "users": [],
   "journals": [
     {
-      "id": "55e5f460-34ea-11ef-8a36-1b25952e8c77",
-      "content": "I'm not empty",
-      "createdAt": "2024-06-28 01:04:13.992964",
-      "updatedAt": "2024-06-28 01:04:13.992974"
+      "id": "0f461b90-366e-11ef-9165-fdd2f1eafbde",
+      "content": "Teste B",
+      "createdAt": "2024-06-22 23:17:52.674775",
+      "updatedAt": "2024-06-22 23:17:52.674775"
     },
     {
-      "id": "b2617de0-34ea-11ef-ad7f-4d05ae55d1d8",
-      "content": "One more tired day!",
-      "createdAt": "2024-06-19 01:06:45.265672",
-      "updatedAt": "2024-06-19 01:06:45.265672"
+      "id": "1279a840-366e-11ef-9165-fdd2f1eafbde",
+      "content": "Teste C",
+      "createdAt": "2024-06-20 23:17:52.674775",
+      "updatedAt": "2024-06-20 23:17:52.674775"
     },
     {
-      "id": "8953ee40-34ec-11ef-ad7f-4d05ae55d1d8",
-      "content": "keep going!",
-      "createdAt": "2024-06-20 01:06:45.265672",
-      "updatedAt": "2024-06-20 01:06:45.265672"
-    },
-    {
-      "id": "7b073e10-363a-11ef-a615-619f8b24b44b",
-      "content": "Teste refresh",
-      "createdAt": "2024-06-20 17:10:24.891635",
-      "updatedAt": "2024-06-20 17:10:24.891635"
-    },
-    {
-      "id": "970cb450-363a-11ef-a615-619f8b24b44b",
-      "content": "mais um teste refreshList();",
-      "createdAt": "2024-06-21 17:10:24.891635",
-      "updatedAt": "2024-06-21 17:10:24.891635"
+      "id": "174efe10-366e-11ef-9165-fdd2f1eafbde",
+      "content": "Oto Teste",
+      "createdAt": "2024-06-28 23:17:52.674775",
+      "updatedAt": "2024-06-28 23:17:52.674775"
     }
   ]
 }

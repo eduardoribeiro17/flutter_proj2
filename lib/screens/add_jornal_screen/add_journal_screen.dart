@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
+import 'package:uuid/uuid.dart';
 
 class AddJournalScreen extends StatelessWidget {
   final Journal journal;
@@ -13,13 +14,18 @@ class AddJournalScreen extends StatelessWidget {
     journal.content = _contentController.text;
 
     JournalService service = JournalService();
-    bool result = await service.register(journal);
+
+    bool result = journal.id.isEmpty
+        ? await service.register(journal)
+        : await service.edit(journal.id, journal);
 
     Navigator.pop(context, result);
   }
 
   @override
   Widget build(BuildContext context) {
+    _contentController.text = journal.content;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
