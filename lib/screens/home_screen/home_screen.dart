@@ -55,14 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void refresh() async {
-    List<Journal> journalList = await service.getAll();
+    // List<Journal> journalList = await service.getAll();
 
-    setState(() {
-      database = {};
+    // setState(() {
+    //   database = {};
 
-      for (Journal journal in journalList) {
-        database[journal.id] = journal;
-      }
-    });
+    //   for (Journal journal in journalList) {
+    //     database[journal.id] = journal;
+    //   }
+    // });
   }
 }

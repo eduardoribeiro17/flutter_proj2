@@ -5,25 +5,44 @@
       "content": "Ola Mundo"
     }
   ],
-  "users": [],
+  "users": [
+    {
+      "email": "eduardoribeiro17@gmail.com",
+      "password": "$2a$10$bwTLEcIKoizwZuTvbFLWieN0bq3L.Ae6BrEH6hZAFwx1N9OrFej1K",
+      "id": 1
+    },
+    {
+      "email": "not@gmail.com",
+      "password": "$2a$10$57oSEaoGZAW87bFsWIWRO.a2AhWw6U60SH3ZULWmwErbwIyxuzurS",
+      "id": 2
+    },
+    {
+      "email": "teste@teste.com",
+      "password": "$2a$10$am8sUmNMbElbswZWxQp1heY02qzrlOkAZ.Z6aBM/T59Up7v8AVnbC",
+      "id": 3
+    }
+  ],
   "journals": [
     {
       "id": "0f461b90-366e-11ef-9165-fdd2f1eafbde",
       "content": "Teste B",
       "createdAt": "2024-06-22 23:17:52.674775",
-      "updatedAt": "2024-06-22 23:17:52.674775"
+      "updatedAt": "2024-06-22 23:17:52.674775",
+      "userId": 3
     },
     {
       "id": "1279a840-366e-11ef-9165-fdd2f1eafbde",
       "content": "Teste C",
       "createdAt": "2024-06-20 23:17:52.674775",
-      "updatedAt": "2024-06-20 23:17:52.674775"
+      "updatedAt": "2024-06-20 23:17:52.674775",
+      "userId": 1
     },
     {
       "id": "174efe10-366e-11ef-9165-fdd2f1eafbde",
       "content": "Oto Teste",
       "createdAt": "2024-06-28 23:17:52.674775",
-      "updatedAt": "2024-06-28 23:17:52.674775"
+      "updatedAt": "2024-06-28 23:17:52.674775",
+      "userId": 3
     }
   ]
 }

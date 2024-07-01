@@ -1,32 +1,16 @@
-import 'package:flutter_webapi_first_course/models/journal.dart';
-import 'package:flutter_webapi_first_course/services/http_interceptors.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:http_interceptor/http/intercepted_client.dart';
+import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
+import 'package:flutter_webapi_first_course/models/journal.dart';
+import 'package:flutter_webapi_first_course/services/server.dart';
+
 class JournalService {
-  static const String _host = '192.168.5.165';
-  static const String _port = '3000';
-  static const String url = 'http://$_host:$_port/';
-  static const String resource = 'journals/';
-
-  http.Client client =
-      InterceptedClient.build(interceptors: [LoggerInterceptor()]);
-
-  getUrl({String? param}) {
-    if (param != null && param.isNotEmpty) {
-      return Uri.parse('$url$resource$param');
-    }
-
-    return Uri.parse('$url$resource');
-  }
-
+  http.Client client = Server().client;
   final Map<String, String> _headers = {'Content-Type': 'application/json'};
 
   Future<List<Journal>> getAll() async {
-    http.Response resp = await client.get(getUrl());
+    http.Response resp = await client.get(Server.getUrl(resource: 'journals'));
 
     if (resp.statusCode != 200) throw Exception();
 
@@ -45,7 +29,7 @@ class JournalService {
     final String content = jsonEncode(journal.toMap());
 
     http.Response resp = await client.post(
-      getUrl(),
+      Server.getUrl(resource: 'journals'),
       headers: _headers,
       body: content,
     );
@@ -57,7 +41,7 @@ class JournalService {
     final String content = jsonEncode(journal.toMap());
 
     http.Response resp = await client.put(
-      getUrl(param: id),
+      Server.getUrl(resource: 'journals', param: id),
       headers: _headers,
       body: content,
     );
@@ -66,7 +50,9 @@ class JournalService {
   }
 
   Future<bool> delete(String target) async {
-    http.Response resp = await http.delete(getUrl(param: target));
+    http.Response resp = await client.delete(
+      Server.getUrl(resource: 'journals', param: target),
+    );
 
     return resp.statusCode == 200;
   }
