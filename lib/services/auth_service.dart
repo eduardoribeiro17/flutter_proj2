@@ -7,7 +7,7 @@ import 'package:flutter_webapi_first_course/exceptions/user_not_find_exception.d
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final http.Client _client = Server().client;
+  final http.Client _client = Server.client;
 
   Future<bool> login({required String email, required String password}) async {
     http.Response resp = await _client.post(

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "json-server db.json -w -m ./node_modules/json-server-auth -H 192.168.5.165 -r routes.json"
+    "start": "json-server db.json -w -m ./node_modules/json-server-auth -H 10.90.1.237 -r routes.json"
   },
   "author": "",
   "license": "ISC",

@@ -6,11 +6,20 @@ import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/server.dart';
 
 class JournalService {
-  http.Client client = Server().client;
-  final Map<String, String> _headers = {'Content-Type': 'application/json'};
+  http.Client client = Server.client;
 
-  Future<List<Journal>> getAll() async {
-    http.Response resp = await client.get(Server.getUrl(resource: 'journals'));
+  Map<String, String> headers = {'Content-Type': 'application/json'};
+
+  Future<List<Journal>> getAll({
+    required String userId,
+    required userToken,
+  }) async {
+    headers.addAll({'authorization': userToken});
+
+    http.Response resp = await client.get(
+      Server.getUrl(resource: 'users/$userId/journals'),
+      headers: headers,
+    );
 
     if (resp.statusCode != 200) throw Exception();
 
@@ -30,7 +39,7 @@ class JournalService {
 
     http.Response resp = await client.post(
       Server.getUrl(resource: 'journals'),
-      headers: _headers,
+      headers: headers,
       body: content,
     );
 
@@ -42,7 +51,7 @@ class JournalService {
 
     http.Response resp = await client.put(
       Server.getUrl(resource: 'journals', param: id),
-      headers: _headers,
+      headers: headers,
       body: content,
     );
 
