@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_webapi_first_course/exceptions/token_not_valid_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
@@ -11,17 +13,23 @@ class JournalService {
   Map<String, String> headers = {'Content-Type': 'application/json'};
 
   Future<List<Journal>> getAll({
-    required String userId,
-    required userToken,
+    required int? userId,
+    required String? userToken,
   }) async {
-    headers.addAll({'authorization': userToken});
+    headers.addAll({'authorization': 'Bearer $userToken'});
 
     http.Response resp = await client.get(
       Server.getUrl(resource: 'users/$userId/journals'),
       headers: headers,
     );
 
-    if (resp.statusCode != 200) throw Exception();
+    if (resp.statusCode != 200) {
+      if (jsonDecode(resp.body) == 'jwt expired') {
+        throw TokenNotValidException();
+      }
+
+      throw HttpException(resp.body);
+    }
 
     List<Journal> list = [];
     List<dynamic> respList = jsonDecode(resp.body);
@@ -33,9 +41,10 @@ class JournalService {
     return list;
   }
 
-  Future<bool> register(Journal journal) async {
-    journal.id = const Uuid().v1();
+  Future<bool> register(Journal journal, String userToken) async {
     final String content = jsonEncode(journal.toMap());
+    headers.addAll({'authorization': 'Bearer $userToken'});
+    journal.id = const Uuid().v1();
 
     http.Response resp = await client.post(
       Server.getUrl(resource: 'journals'),
@@ -43,11 +52,20 @@ class JournalService {
       body: content,
     );
 
-    return resp.statusCode == 201;
+    if (resp.statusCode != 201) {
+      if (jsonDecode(resp.body) == 'jwt expired') {
+        throw TokenNotValidException();
+      }
+
+      throw HttpException(resp.body);
+    }
+
+    return true;
   }
 
-  Future<bool> edit(String id, Journal journal) async {
+  Future<bool> edit(String id, Journal journal, String userToken) async {
     final String content = jsonEncode(journal.toMap());
+    headers.addAll({'authorization': 'Bearer $userToken'});
 
     http.Response resp = await client.put(
       Server.getUrl(resource: 'journals', param: id),
@@ -55,14 +73,32 @@ class JournalService {
       body: content,
     );
 
-    return resp.statusCode == 200;
+    if (resp.statusCode != 201) {
+      if (jsonDecode(resp.body) == 'jwt expired') {
+        throw TokenNotValidException();
+      }
+
+      throw HttpException(resp.body);
+    }
+
+    return true;
   }
 
-  Future<bool> delete(String target) async {
-    http.Response resp = await client.delete(
-      Server.getUrl(resource: 'journals', param: target),
-    );
+  Future<bool> delete(String target, String userToken) async {
+    headers.addAll({'authorization': 'Bearer $userToken'});
 
-    return resp.statusCode == 200;
+    http.Response resp = await client.delete(
+        Server.getUrl(resource: 'journals', param: target),
+        headers: headers);
+
+    if (resp.statusCode != 201) {
+      if (jsonDecode(resp.body) == 'jwt expired') {
+        throw TokenNotValidException();
+      }
+
+      throw HttpException(resp.body);
+    }
+
+    return true;
   }
 }

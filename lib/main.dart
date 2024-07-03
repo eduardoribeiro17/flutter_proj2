@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webapi_first_course/services/journal_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
@@ -9,8 +8,8 @@ import 'package:flutter_webapi_first_course/screens/login_screen/login_screen.da
 import 'screens/home_screen/home_screen.dart';
 
 void main() async {
-  JournalService service = JournalService();
-  service.getAll(userId: '1', userToken: 'sddsd');
+  // JournalService service = JournalService();
+  // service.getAll(userId: '1', userToken: 'sddsd');
 
   WidgetsFlutterBinding.ensureInitialized();
 

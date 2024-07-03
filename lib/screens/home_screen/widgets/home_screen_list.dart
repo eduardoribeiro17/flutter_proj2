@@ -5,11 +5,15 @@ List<JournalCard> generateListJournalCards({
   required int windowPage,
   required DateTime currentDay,
   required Map<String, Journal> database,
+  required int userId,
+  required String token,
   required Function refreshList,
 }) {
   List<JournalCard> list = List.generate(
     windowPage + 1,
     (index) => JournalCard(
+      userId: userId,
+      token: token,
       showedDate: currentDay.subtract(Duration(days: (windowPage) - index)),
       refreshList: refreshList,
     ),
@@ -24,6 +28,8 @@ List<JournalCard> generateListJournalCards({
           .abs();
 
       list[difference] = JournalCard(
+        userId: userId,
+        token: token,
         refreshList: refreshList,
         showedDate: list[difference].showedDate,
         journal: value,

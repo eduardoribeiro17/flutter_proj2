@@ -19,7 +19,7 @@ class AuthService {
       String content = jsonDecode(resp.body);
 
       switch (content) {
-        case "Cannot find user":
+        case 'Cannot find user':
           throw UserNotFindException();
       }
 

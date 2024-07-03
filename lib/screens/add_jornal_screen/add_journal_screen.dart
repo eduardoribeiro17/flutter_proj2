@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddJournalScreen extends StatelessWidget {
   final Journal journal;
@@ -10,15 +11,20 @@ class AddJournalScreen extends StatelessWidget {
   final TextEditingController _contentController = TextEditingController();
 
   registerJournal(BuildContext context) async {
-    journal.content = _contentController.text;
-
     JournalService service = JournalService();
 
-    bool result = journal.id.isEmpty
-        ? await service.register(journal)
-        : await service.edit(journal.id, journal);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString('accessToken');
 
-    Navigator.pop(context, result);
+    journal.content = _contentController.text;
+
+    if (token != null) {
+      bool result = journal.id.isEmpty
+          ? await service.register(journal, token)
+          : await service.edit(journal.id, journal, token);
+
+      Navigator.pop(context, result);
+    }
   }
 
   @override

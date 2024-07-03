@@ -6,12 +6,16 @@ import 'package:flutter_webapi_first_course/services/journal_service.dart';
 
 class JournalCard extends StatelessWidget {
   final Journal? journal;
+  final int userId;
+  final String token;
   final DateTime showedDate;
   final Function refreshList;
 
   const JournalCard({
     Key? key,
     this.journal,
+    required this.userId,
+    required this.token,
     required this.showedDate,
     required this.refreshList,
   }) : super(key: key);
@@ -20,6 +24,7 @@ class JournalCard extends StatelessWidget {
     Journal newJ = Journal(
       id: '',
       content: '',
+      userId: userId,
       createdAt: showedDate,
       updatedAt: showedDate,
     );
@@ -54,7 +59,7 @@ class JournalCard extends StatelessWidget {
     );
 
     if (confirm) {
-      service.delete(id).then(
+      service.delete(id, token).then(
         (value) {
           if (value) {
             refreshList();
