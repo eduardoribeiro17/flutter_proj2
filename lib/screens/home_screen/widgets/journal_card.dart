@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_webapi_first_course/exceptions/token_not_valid_exception.dart';
+import 'package:flutter_webapi_first_course/helpers/logout.dart';
 import 'package:flutter_webapi_first_course/helpers/weekday.dart';
 import 'package:flutter_webapi_first_course/models/journal.dart';
 import 'package:flutter_webapi_first_course/screens/common/confirmation_dialog.dart';
+import 'package:flutter_webapi_first_course/screens/common/exception_dialog.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 
 class JournalCard extends StatelessWidget {
@@ -62,19 +67,28 @@ class JournalCard extends StatelessWidget {
       service.delete(id, token).then(
         (value) {
           if (value) {
-            refreshList();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Registro deletado com sucesso!'),
               ),
             );
+
+            refreshList();
           }
         },
-        onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Ocorreu um erro ao salvar'),
-          ),
-        ),
+      ).catchError(
+        (error) {
+          showExceptionDialog(context, content: error.message);
+          logout(context);
+          return null;
+        },
+        test: (error) => error is TokenNotValidException,
+      ).catchError(
+        (error) {
+          showExceptionDialog(context, content: error.message);
+          return null;
+        },
+        test: (error) => error is HttpException,
       );
     }
   }

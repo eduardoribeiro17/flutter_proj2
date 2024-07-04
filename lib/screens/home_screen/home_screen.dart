@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_webapi_first_course/exceptions/token_not_valid_exception.dart';
+import 'package:flutter_webapi_first_course/helpers/logout.dart';
+import 'package:flutter_webapi_first_course/screens/common/exception_dialog.dart';
 import 'package:flutter_webapi_first_course/screens/home_screen/widgets/home_screen_list.dart';
 import 'package:flutter_webapi_first_course/services/journal_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,13 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  logout() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.clear();
-
-    Navigator.pushReplacementNamed(context, 'login');
-  }
-
   void refresh() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('accessToken');
@@ -46,7 +44,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     List<Journal> journalList =
-        await service.getAll(userId: id, userToken: token);
+        await service.getAll(userId: id, userToken: token).catchError(
+      (error) {
+        showExceptionDialog(context, content: error.message);
+        logout(context);
+        return <Journal>[];
+      },
+      test: (error) => error is TokenNotValidException,
+    ).catchError(
+      (error) {
+        showExceptionDialog(context, content: error.message);
+        return <Journal>[];
+      },
+      test: (error) => error is HttpException,
+    );
 
     setState(() {
       userId = id;
@@ -91,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             ListTile(
-              onTap: () => logout(),
+              onTap: () => logout(context),
               title: const Text('Sair'),
               leading: const Icon(Icons.logout),
             )
