@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webapi_first_course/exceptions/user_not_find_exception.dart';
 import 'package:flutter_webapi_first_course/screens/common/confirmation_dialog.dart';
+import 'package:flutter_webapi_first_course/screens/common/exception_dialog.dart';
 import 'package:flutter_webapi_first_course/services/auth_service.dart';
 
 // ignore: must_be_immutable
@@ -15,26 +18,37 @@ class LoginScreen extends StatelessWidget {
     String password = _passController.text;
 
     AuthService authService = AuthService();
-    try {
-      bool result = await authService.login(email: email, password: password);
 
-      if (result) Navigator.pushNamed(context, 'home');
-    } on UserNotFindException {
-      final dynamic confirm = await showConfirmationDialog(
-        context,
-        content: 'Deseja criar novo usuário com este email e senha?',
-        okOption: 'Criar',
-      );
-
-      if (confirm) {
-        bool result = await authService.register(
-          email: email,
-          password: password,
+    bool result =
+        await authService.login(email: email, password: password).catchError(
+      (error) {
+        showExceptionDialog(context, content: error.message);
+        return false;
+      },
+      test: (error) => error is HttpException,
+    ).catchError(
+      (error) async {
+        final dynamic confirm = await showConfirmationDialog(
+          context,
+          content: 'Deseja criar novo usuário com este email e senha?',
+          okOption: 'Criar',
         );
 
-        if (result) Navigator.pushNamed(context, 'home');
-      }
-    }
+        if (confirm) {
+          bool result = await authService.register(
+            email: email,
+            password: password,
+          );
+
+          if (result) Navigator.pushNamed(context, 'home');
+        }
+
+        return false;
+      },
+      test: (error) => error is UserNotFindException,
+    );
+
+    if (result) Navigator.pushNamed(context, 'home');
   }
 
   @override

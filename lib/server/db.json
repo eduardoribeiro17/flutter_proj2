@@ -20,6 +20,11 @@
       "email": "teste@teste.com",
       "password": "$2a$10$am8sUmNMbElbswZWxQp1heY02qzrlOkAZ.Z6aBM/T59Up7v8AVnbC",
       "id": 3
+    },
+    {
+      "email": "test2e@teste.com",
+      "password": "$2a$10$bKjycOvIbx3fL3qwnUhfzONgN9MlyBmUBy.x0L.C2cPtDr/R3nenK",
+      "id": 4
     }
   ],
   "journals": [

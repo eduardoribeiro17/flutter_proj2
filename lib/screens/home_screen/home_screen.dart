@@ -35,21 +35,43 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(context, 'login');
   }
 
+  void refresh() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString('accessToken');
+    String? email = preferences.getString('email');
+    int? id = preferences.getInt('id');
+
+    if (token == null && email == null && id == null) {
+      Navigator.pushReplacementNamed(context, 'login');
+    }
+
+    List<Journal> journalList =
+        await service.getAll(userId: id, userToken: token);
+
+    setState(() {
+      userId = id;
+      userToken = token;
+
+      database = {};
+
+      for (Journal journal in journalList) {
+        database[journal.id] = journal;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Título basado no dia atual
         title: Text(
           "${currentDay.day}  |  ${currentDay.month}  |  ${currentDay.year}",
         ),
         actions: [
           IconButton(
-              onPressed: () => refresh(),
-              icon: const Icon(
-                Icons.refresh,
-                color: Colors.white,
-              ))
+            onPressed: () => refresh(),
+            icon: const Icon(Icons.refresh, color: Colors.white),
+          )
         ],
       ),
       body: (userId != null && userToken != null)
@@ -77,30 +99,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  void refresh() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? token = preferences.getString('accessToken');
-    String? email = preferences.getString('email');
-    int? id = preferences.getInt('id');
-
-    if (token == null && email == null && id == null) {
-      Navigator.pushReplacementNamed(context, 'login');
-    }
-
-    List<Journal> journalList =
-        await service.getAll(userId: id, userToken: token);
-
-    setState(() {
-      userId = id;
-      userToken = token;
-
-      database = {};
-
-      for (Journal journal in journalList) {
-        database[journal.id] = journal;
-      }
-    });
   }
 }
